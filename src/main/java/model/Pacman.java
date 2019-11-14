@@ -18,22 +18,22 @@ public class Pacman {
     }
 
     // set world for pacman
-    public void setWorld(World world){
+    public void setWorld(World world) {
         this.world = world;
     }
 
-    public boolean getStatus(){
+    public boolean getStatus() {
         return this.status;
     }
 
     //PLACE
     public void place(String comm) {
         String[] comms = comm.split(",");
-        if(comms.length == 3) {
-            int x = Integer.valueOf(comms[0]);
-            int y = Integer.valueOf(comms[1]);
+        if (comms.length == 3) {
+            int x = Integer.parseInt(comms[0]);
+            int y = Integer.parseInt(comms[1]);
 
-            if (world.inWorld(x, y)) {
+            if (world.inWorld(x, y) && Direction.contains(comms[2])) {
                 locX = x;
                 locY = y;
                 this.faceDir = Direction.valueOf(comms[2]);
@@ -75,7 +75,8 @@ public class Pacman {
     public void turn(String comm) {
         if (comm.equals("LEFT")) {
             faceDir = Direction.values()[(faceDir.ordinal() + 4 - 1) % 4];
-        } if(comm.equals("RIGHT")) {
+        }
+        if (comm.equals("RIGHT")) {
             faceDir = Direction.values()[(faceDir.ordinal() + 4 + 1) % 4];
         }
     }
@@ -83,7 +84,7 @@ public class Pacman {
     //REPORT
     public String report() {
         if (this.status) {
-            return locX + "," + locY + "," + faceDir.toString();
+            return "Output: " + locX + "," + locY + "," + faceDir.toString();
         } else {
             return "Waiting to be placed";
         }

@@ -12,7 +12,7 @@ public class Simulator {
         System.out.println("Pacman Simulator/n");
         System.out.println("Please Choose the input method");
         System.out.println("1. Command Line");
-        System.out.println("2. Text File (Input your commands in commands.txt)");
+        System.out.println("2. Text File");
         System.out.print("(1/2): ");
 
         Scanner scanner = new Scanner(System.in);
@@ -20,8 +20,16 @@ public class Simulator {
             System.out.println("Input Commands: ");
         } else {
             try {
-                File file = new File("commands.txt");
-                scanner = new Scanner(file);
+                boolean isVaildPath = false;
+                while (!isVaildPath) {
+                    System.out.println("Put your text file in CommandFiles and input file name:");
+                    if (scanner.hasNext()) {
+                        String path = "CommandFiles/" + scanner.next();
+                        File file = new File(path);
+                        scanner = new Scanner(file);
+                        isVaildPath = true;
+                    }
+                }
             } catch (Exception e) {
                 System.out.println(e);
             }
@@ -41,10 +49,7 @@ public class Simulator {
                     String[] comms = command.split("\\s+");
                     if (comms.length == 2 && comms[0].equals("PLACE")) {
                         pacman.place(comms[1]);
-                    } else{
-                        System.out.println("Invalid Command");
                     }
-                    continue;
                 } else {
                     switch (command) {
                         case "LEFT":
@@ -55,7 +60,7 @@ public class Simulator {
                             pacman.move();
                             break;
                         case "REPORT":
-                            System.out.println("Output: " + pacman.report());
+                            System.out.println(pacman.report());
                             break;
                         case "EXIT":
                             notExit = false;
@@ -68,5 +73,7 @@ public class Simulator {
         }
 
         scanner.close();
+        System.out.println("FINISHED");
     }
+
 }
