@@ -7,39 +7,61 @@ import java.io.File;
 import java.util.Scanner;
 
 public class Simulator {
-    public static void main(String[] args) {
 
-        System.out.println("Pacman Simulator/n");
+    private final int WORLD_MAX_WIDTH = 5;
+    private final int WORLD_MAX_HEIGHT = 5;
+
+    public void run(){
+        System.out.println("Pacman Simulator Start");
+        Scanner scanner = new Scanner(System.in);
+        // create world and pacman
+        World world = new World(WORLD_MAX_WIDTH,WORLD_MAX_HEIGHT);
+        Pacman pacman = new Pacman();
+        pacman.setWorld(world);
+
+        //get input option
+        scanner = getInputOption(scanner);
+
+        //command handler
+        handleCommand(scanner,pacman);
+
+        scanner.close();
+        System.out.println("Pacman Simulator Stop");
+
+
+    }
+
+    // Choose the input option, by file or by command line
+    private Scanner getInputOption(Scanner scanner){
         System.out.println("Please Choose the input method");
         System.out.println("1. Command Line");
         System.out.println("2. Text File");
         System.out.print("(1/2): ");
-
-        Scanner scanner = new Scanner(System.in);
         if (scanner.nextInt() == 1) {
             System.out.println("Input Commands: ");
         } else {
             try {
                 boolean isVaildPath = false;
+                System.out.println("Please put your text file in the directory CommandFiles and input filename:");
                 while (!isVaildPath) {
-                    System.out.println("Put your text file in CommandFiles and input file name:");
                     if (scanner.hasNext()) {
-                        String path = "CommandFiles/" + scanner.next();
-                        File file = new File(path);
-                        scanner = new Scanner(file);
-                        isVaildPath = true;
+                        File file = new File("CommandFiles/" + scanner.next());
+                        if(file.exists()) {
+                            scanner = new Scanner(file);
+                            isVaildPath = true;
+                        }else {
+                            System.out.println("Please input an valid filename:");
+                        }
                     }
                 }
             } catch (Exception e) {
                 System.out.println(e);
             }
         }
+        return scanner;
+    }
 
-        //create world and pacman
-        World world = new World(5, 5);
-        Pacman pacman = new Pacman();
-        pacman.setWorld(world);
-
+    private void handleCommand(Scanner scanner, Pacman pacman){
         boolean notExit = true;
         while (notExit) {
             //Make sure all commands are uppercase
@@ -71,9 +93,6 @@ public class Simulator {
                 }
             }
         }
-
-        scanner.close();
-        System.out.println("FINISHED");
     }
 
 }
